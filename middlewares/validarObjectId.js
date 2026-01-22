@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const validarObjectId = (paramName) => {
     return (req,res,next) => {
-        const id = req.params[paramName];
+        const id = req.params[paramName];//En lugar de req.params.id
 
         if(!mongoose.Types.ObjectId.isValid(id)){
             return res.status(400).json({

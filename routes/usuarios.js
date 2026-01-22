@@ -1,5 +1,7 @@
 const express = require('express');
 const ruta = express.Router();
+const validarObjectId = require('../middlewares/validarObjectId');
+const { obtenerCursoPorId } = require('../controller/cursoController');
 const Usuario = require('../models/usuario_model');
 const Joi = require('joi');
 
@@ -32,18 +34,8 @@ ruta.get('/', (req, res) => {
     });
 });
 
-ruta.get('/:id', (req,res) => {
-    let usuario = buscarUsuarioPorId(req.params.id);
-    usuario.then(valor => {
-        res.json({
-            valor
-        });
-    }).catch(err => {
-        res.status(400).json({
-            error : err
-        });
-    });
-});
+ruta.get('/:id',validarObjectId('id'),obtenerCursoPorId);
+
 
 ruta.post('/', (req,res) => {
     let body = req.body;
