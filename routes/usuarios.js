@@ -3,7 +3,29 @@ const ruta = express.Router();
 const Usuario = require('../models/usuario_model');
 
 ruta.get('/', (req, res) => {
-    res.json('Listo el GET de usuarios');
+    let usuarios = listarUsuariosActivos();
+    usuarios.then( lista => {
+        res.json({
+            valor: lista
+        });
+    }).catch( err => {
+        res.status(400).json({
+            error: err
+        });
+    });
+});
+
+ruta.get('/:id', (req,res) => {
+    let usuario = buscarUsuarioPorId(req.params.id);
+    usuario.then(valor => {
+        res.json({
+            valor
+        });
+    }).catch(err => {
+        res.status(400).json({
+            error : err
+        });
+    });
 });
 
 ruta.post('/', (req,res) => {
@@ -47,6 +69,15 @@ ruta.delete('/:email', async (req, res) => {
         });
     });
 });
+
+const buscarUsuarioPorId = async(id) => {    
+    return Usuario.findById(id);
+}
+
+const listarUsuariosActivos = async() => {
+    let usuarios = await Usuario.find({estado: true});
+    return usuarios;
+}
 
 const activarUsuario = async(email) => {
     let usuario = await Usuario.findOneAndUpdate({email},{
