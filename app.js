@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));//Decodificar
 app.use('/api/usuarios', usuarios);
 app.use('/api/cursos', cursos);
 
