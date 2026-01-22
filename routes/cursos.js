@@ -44,6 +44,30 @@ ruta.post('/', (req,res) => {
     }
 })
 
+ruta.put('/:id', (req, res) => {
+    let id = req.params.id;
+
+    const { error, value } = schema.validate(
+        {titulo: req.body.titulo, descripcion: req.body.descripcion});
+
+    if(!error){
+        let resultado = actualizarCurso(id,req.body);
+        resultado.then( curso => {
+            res.json({
+                curso
+            });
+        }).catch( err => {
+            res.status(400).json({
+                error: err.message
+            });
+        });
+    }else{
+        res.status(400).json({
+            error: error.details[0].message
+        });
+    } 
+});
+
 const crearCurso = async(body) => {
 
     let curso = new Curso({
@@ -54,4 +78,22 @@ const crearCurso = async(body) => {
     return await curso.save();
 }
 
+const actualizarCurso = async(id,body) => {
+    let cursoExiste = await existeCursoPorId(id);
+    if(!cursoExiste){
+        throw new Error('No existe un curso con ese ID');
+    }
+
+    let curso = await Curso.findOneAndUpdate({_id:id},{
+        $set: {
+            titulo: body.titulo,
+            descripcion: body.descripcion
+        }
+    },{new: true});
+    return curso;
+}
+
+const existeCursoPorId = async(id) => {
+    return Curso.findById(id);
+}
 module.exports = ruta;
