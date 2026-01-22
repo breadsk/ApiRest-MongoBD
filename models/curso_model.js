@@ -8,11 +8,7 @@ const cursoSchema = new mongoose.Schema({
     descripcion: {
         type: String,
         required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
+    },    
     estado: {
         type: Boolean,
         default: true
