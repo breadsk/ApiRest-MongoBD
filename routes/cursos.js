@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const ruta = express.Router();
 const Curso = require('../models/curso_model');
 const Joi = require('joi');
@@ -16,7 +17,55 @@ const schema = Joi.object({
 
 
 ruta.get('/', (req, res) => {
-    res.json('Listo el GET de cursos');
+    let cursos = listarCursosActivos();
+    cursos.then( lista => {
+        res.json({
+            valor: lista
+        });
+    }).catch( err => {
+        res.status(400).json({
+            error: err.message
+        });
+    });
+});
+
+ruta.get('/:id', async(req,res) => {
+
+    const id = req.params.id;
+
+    try{
+        //1 Validar formato del ID
+        if(!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(400).json({
+                success: false,
+                error: `ID ${id} no tiene formato válido. Debe ser un ObjectId de 24 caracteres hexadecimales`
+            })
+        }
+
+        //2.Buscar el curso
+        const curso = await Curso.findById(id);
+
+        //3. Verrificar si existe
+        if(!curso){
+            return res.status(404).json({
+                success: false,
+                error: 'No existe un curso con ese ID'
+            });
+        }
+
+        //4. Si existe mostrarlo
+        res.json({
+            success:true,
+            valor:curso
+        });
+
+
+    } catch(err) {
+        res.status(500).json({
+            success:false,
+            error: 'Error interno del servidor'
+        })
+    }
 });
 
 ruta.post('/', (req,res) => {
@@ -68,6 +117,34 @@ ruta.put('/:id', (req, res) => {
     } 
 });
 
+ruta.delete('/:id', (req, res) => {
+    let resultado = desactivarCurso(req.params.id);
+    resultado.then( curso => {
+        res.json({
+            curso
+        });
+    }).catch( err => {
+        res.status(400).json({
+            error: err.message
+        });
+    });
+});
+
+const buscarCursoPorId = async(id) => {
+
+    let existeCurso = await existeCursoPorId(id);
+    if(!existeCurso){
+        throw new Error('No existe un curso con ese ID');
+    }
+
+    return Curso.findById(id);
+}
+
+const listarCursosActivos = async() => {
+    let cursos = await Curso.find({estado:true});
+    return cursos;
+}
+
 const crearCurso = async(body) => {
 
     let curso = new Curso({
@@ -93,7 +170,16 @@ const actualizarCurso = async(id,body) => {
     return curso;
 }
 
-const existeCursoPorId = async(id) => {
+const desactivarCurso = async(id) => {
+    let curso = await Curso.findOneAndUpdate({_id:id},{
+        $set: {
+            estado: false
+        }
+    },{ new:true });
+    return curso;
+}
+
+async function existeCursoPorId(id) {
     return Curso.findById(id);
 }
 module.exports = ruta;
