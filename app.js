@@ -1,24 +1,27 @@
+// app.js
+const express = require('express');
+const dotenv = require('dotenv');
+const connectDB = require('./config/database');
+
+// Routers
 const usuarios = require('./routes/usuarios');
 const cursos = require('./routes/cursos');
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 
 
 dotenv.config();
+
 const app = express();
 
+// Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));//Decodificar
+
+//Conectar a la DB antes de iniciar el server
+connectDB();
+
+//Rutas
 app.use('/api/usuarios', usuarios);
 app.use('/api/cursos', cursos);
-
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => {
-    console.log('Connected to MongoDB');
-}).catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-});
 
 const port = process.env.PORT || 3000;
 
