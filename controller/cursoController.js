@@ -72,8 +72,50 @@ const crearCurso = async(req,res) => {
     }
 }
 
+const actualizarCurso = async(req,res) => {
+
+    
+
+    try{
+        let body = req.body;
+        let id = req.params.id;
+        let cursoExiste = await existeCursoPorId(id);
+        
+        if(!cursoExiste){
+            throw new Error('No existe un curso con ese ID');
+        }
+
+        
+
+        let curso = await Curso.findOneAndUpdate({_id:id},{
+            $set:{
+                titulo: body.titulo,
+                descripcion: body.descripcion
+            }
+        },{new:true});
+
+        console.log("El curso es: ",curso);
+
+        res.json({
+            success: true,
+            valor: curso,
+        });
+
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            error: 'Error interno del servidor'
+        });
+    }    
+}
+
+async function existeCursoPorId(id,body){
+    return Curso.findById(id);
+}
+
 module.exports = {
     obtenerCursoPorId,
     listarCursosActivos,
     crearCurso,
+    actualizarCurso,
 }
