@@ -53,8 +53,46 @@ const obtenerUsuarioPorEmail = async(req,res) => {
     }
 }
 
+const guardarUsuario = async(req,res) => {
+    let body = req.body;
+
+    try{
+        let email = await existeEmail(body.email);
+
+        if(email){
+            res.status(409).json({
+                success:false,
+                error:'Ya hay un usuario con ese email'
+            });
+        }
+
+        let usuario = new Usuario({
+            email: body.email,
+            nombre: body.nombre,
+            password: body.password
+        });
+
+        const usuarioAdd =  await usuario.save();
+
+        res.json({
+            success:true,
+            valor:usuarioAdd
+        });
+
+    }catch(error) {
+        res.status(500).json({
+            success:false,
+            error: 'Error interno del servidor'
+        });
+    }
+}
+
+async function existeEmail(email){
+    return Usuario.findOne({email: email});
+}
 
 module.exports = {
     listarUsuariosActivos,
     obtenerUsuarioPorEmail,
+    guardarUsuario,
 }
