@@ -87,12 +87,76 @@ const guardarUsuario = async(req,res) => {
     }
 }
 
+const actualizarUsuario = async(req,res) => {
+    try{
+
+        let body = req.body;        
+        let email = req.params.email;
+        let usuarioExiste = await existeUsuario(email);
+
+        if(!usuarioExiste){
+            return res.status(404).json({
+                success:false,
+                error:'Usuario no existe para editar'
+            });
+        }
+
+        let usuario = await Usuario.findOneAndUpdate({email},{
+            $set:{
+                nombre: body.nombre,
+                password:body.password
+            }
+        },{ new:true });
+
+        res.status(200).json({
+            success:true,
+            valor:usuario
+        })
+
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            error: 'error interno del servidor'
+        });
+    }
+}
+
+const desactivarUsuario = async(req,res) => {
+    try{
+
+        let email = req.params.email;
+
+        let usuario = await Usuario.findOneAndUpdate({email},{
+            $set: {
+                estado:false
+            }
+        },{ new:true });
+
+        return res.status(200).json({
+            success:true,
+            usuario
+        });
+
+    }catch(error){
+        res.status(500).json({
+            success:false,
+            error: 'Error interno en el servidor'
+        })
+    }
+}
+
 async function existeEmail(email){
     return Usuario.findOne({email: email});
+}
+
+async function existeUsuario(email){
+    return Usuario.findOne({email});
 }
 
 module.exports = {
     listarUsuariosActivos,
     obtenerUsuarioPorEmail,
     guardarUsuario,
+    actualizarUsuario,
+    desactivarUsuario,
 }

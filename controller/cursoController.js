@@ -79,9 +79,12 @@ const actualizarCurso = async(req,res) => {
         let id = req.params.id;
         let cursoExiste = await existeCursoPorId(id);
         
-        if(!cursoExiste)
-            throw new Error('No existe un curso con ese ID');
-        
+        if(!cursoExiste){
+            res.status(404).json({
+                success:false,
+                error:'Curso no existe para editar'
+            })
+        }                    
 
         let curso = await Curso.findOneAndUpdate({_id:id},{
             $set:{
@@ -127,7 +130,7 @@ const desactivarCurso = async(req,res) => {
     }
 }
 
-async function existeCursoPorId(id,body){
+async function existeCursoPorId(id){
     return Curso.findById(id);
 }
 
