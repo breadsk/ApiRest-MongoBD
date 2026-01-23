@@ -1,0 +1,8 @@
+Señales de que necesitas un middleware
+1.Copié y pegué este código en 3 lugares" → Middleware
+
+2.Esto debería ejecutarse antes de TODAS las rutas" → app.use()
+
+3.Necesito la misma validación en POST y PUT" → Middleware
+
+4.Quiero medir/registrar algo sin modificar la lógica" → Middleware

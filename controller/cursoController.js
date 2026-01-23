@@ -1,5 +1,23 @@
 const Curso = require('../models/curso_model');
 
+//En Express, los controladores deben manejar 
+//los objetos req y res
+const listarCursosActivos = async(req,res) => {    
+    try{
+        let cursos = await Curso.find({estado: true});
+        res.json({
+            success:true,
+            valor:cursos
+        });
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            error: 'Error interno del servidor'
+        })
+    }
+
+}
+
 const obtenerCursoPorId = async(req,res) => {
     try{
 
@@ -27,6 +45,35 @@ const obtenerCursoPorId = async(req,res) => {
     }
 }
 
+const crearCurso = async(req,res) => {
+
+    let body = req.body;
+
+    try{
+
+        let curso = new Curso({
+            titulo: body.titulo,
+            descripcion: body.descripcion
+        });
+
+        const cursoAdd = await curso.save();
+
+        res.json({
+            success: true,
+            valor: cursoAdd,
+        });
+
+        
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            error: 'Error interno del servidor'
+        });
+    }
+}
+
 module.exports = {
-    obtenerCursoPorId
+    obtenerCursoPorId,
+    listarCursosActivos,
+    crearCurso,
 }

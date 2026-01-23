@@ -12,7 +12,11 @@ const validarObjectId = (paramName) => {
         }
 
         next(); //Si es valido, pasa al siguiente middleware/controlador
+        //Si el next la peticion quedaria atascada en el middleware
     };
 };
 
 module.exports = validarObjectId;
+//¿Qué hace next()?
+//next() le dice a Express: "Ya terminé mi trabajo en este middleware, 
+// pasa al siguiente paso". Es como un semáforo en verde para que la petición continúe su camino.
