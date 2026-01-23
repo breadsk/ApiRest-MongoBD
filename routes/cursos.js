@@ -6,9 +6,10 @@ const {
         obtenerCursoPorId,
         listarCursosActivos,
         crearCurso,
-        actualizarCurso
+        actualizarCurso,
+        desactivarCurso,
     } = require('../controller/cursoController');
-const Curso = require('../models/curso_model');
+
 
 
 ruta.get('/', listarCursosActivos);
@@ -19,30 +20,6 @@ ruta.post('/',validarCurso, crearCurso);
 
 ruta.put('/:id', validarCurso, actualizarCurso);
 
-ruta.delete('/:id', (req, res) => {
-    let resultado = desactivarCurso(req.params.id);
-    resultado.then( curso => {
-        res.json({
-            curso
-        });
-    }).catch( err => {
-        res.status(400).json({
-            error: err.message
-        });
-    });
-});
+ruta.delete('/:id', desactivarCurso);
 
-
-const desactivarCurso = async(id) => {
-    let curso = await Curso.findOneAndUpdate({_id:id},{
-        $set: {
-            estado: false
-        }
-    },{ new:true });
-    return curso;
-}
-
-async function existeCursoPorId(id) {
-    return Curso.findById(id);
-}
 module.exports = ruta;

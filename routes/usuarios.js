@@ -1,7 +1,7 @@
 const express = require('express');
 const ruta = express.Router();
 const validarObjectId = require('../middlewares/validarObjectId');
-const { obtenerCursoPorId } = require('../controller/cursoController');
+const { listarUsuariosActivos , obtenerUsuarioPorEmail } = require('../controller/usuarioController');
 const Usuario = require('../models/usuario_model');
 const Joi = require('joi');
 
@@ -21,20 +21,9 @@ const schema = Joi.object({
     
 
 
-ruta.get('/', (req, res) => {
-    let usuarios = listarUsuariosActivos();
-    usuarios.then( lista => {
-        res.json({
-            valor: lista
-        });
-    }).catch( err => {
-        res.status(400).json({
-            error: err
-        });
-    });
-});
+ruta.get('/', listarUsuariosActivos);
 
-ruta.get('/:id',validarObjectId('id'),obtenerCursoPorId);
+ruta.get('/:email',obtenerUsuarioPorEmail);
 
 
 ruta.post('/', (req,res) => {
@@ -102,11 +91,6 @@ ruta.delete('/:email', async (req, res) => {
 
 const buscarUsuarioPorId = async(id) => {    
     return Usuario.findById(id);
-}
-
-const listarUsuariosActivos = async() => {
-    let usuarios = await Usuario.find({estado: true});
-    return usuarios;
 }
 
 const activarUsuario = async(email) => {

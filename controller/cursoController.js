@@ -13,7 +13,7 @@ const listarCursosActivos = async(req,res) => {
         res.status(500).json({
             success: false,
             error: 'Error interno del servidor'
-        })
+        });
     }
 
 }
@@ -73,18 +73,14 @@ const crearCurso = async(req,res) => {
 }
 
 const actualizarCurso = async(req,res) => {
-
     
-
     try{
         let body = req.body;
         let id = req.params.id;
         let cursoExiste = await existeCursoPorId(id);
         
-        if(!cursoExiste){
+        if(!cursoExiste)
             throw new Error('No existe un curso con ese ID');
-        }
-
         
 
         let curso = await Curso.findOneAndUpdate({_id:id},{
@@ -109,6 +105,28 @@ const actualizarCurso = async(req,res) => {
     }    
 }
 
+const desactivarCurso = async(req,res) => {
+    try{
+        let id = req.params.id;
+        let curso = await Curso.findOneAndUpdate({_id:id},{
+            $set: {
+                estado: false
+            }
+        },{new:true});
+
+        res.json({
+            success:true,
+            valor: curso,
+        });
+
+    }catch(error){
+        res.status(500).json({
+            success: false,
+            error: 'Error interno del servidor'
+        });
+    }
+}
+
 async function existeCursoPorId(id,body){
     return Curso.findById(id);
 }
@@ -118,4 +136,5 @@ module.exports = {
     listarCursosActivos,
     crearCurso,
     actualizarCurso,
+    desactivarCurso,
 }
