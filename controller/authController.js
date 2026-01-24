@@ -1,5 +1,6 @@
 const Usuario = require('../models/usuario_model');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 //bcrypt es intencionalmente lento (~250ms por comparación) 
 // como medida de seguridad contra ataques de fuerza bruta. 
@@ -24,19 +25,18 @@ const login = async(req,res) => {
         //3. Verificar contraseña
         const passwordValido = await bcrypt.compare(password,usuario.password);
 
-        if(!passwordValido){
+        if(!passwordValido){            
             return res.status(400).json({
                 success: false,
                 error: 'Usuario o contraseña incorrecta'
-            });
+            });            
         }
+        const jwToken = jwt.sign({_id:usuario._id,nombre:usuario.nombre,email:usuario.email},'password');
 
         //4. Si todo es correcto, devolver usuario ( sin password )
         res.json({
             success:true,
-            email:usuario.email,
-            nombre:usuario.nombre,
-            estado:usuario.estado
+            jwToken
         });
 
     }catch(error){
