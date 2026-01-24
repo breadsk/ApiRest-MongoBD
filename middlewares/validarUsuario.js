@@ -4,7 +4,7 @@ const Joi = require('joi');
 const schema = Joi.object({
     nombre: Joi.string()        
         .min(3)
-        .max(10)
+        .max(100)
         .required(),
     
     password: Joi.string()

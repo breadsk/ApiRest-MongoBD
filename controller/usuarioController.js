@@ -6,7 +6,8 @@ const listarUsuariosActivos = async(req,res) => {
 
     try{
 
-        let usuarios = await Usuario.find({estado: true});
+        let usuarios = await Usuario.find({estado: true})
+        .select({nombre:1,email:1})
         res.json({
             success:true,
             valor:usuarios,
@@ -76,7 +77,8 @@ const guardarUsuario = async(req,res) => {
 
         res.json({
             success:true,
-            valor:usuarioAdd
+            nombre: usuarioAdd.nombre,
+            email: usuarioAdd.email
         });
 
     }catch(error) {
@@ -110,7 +112,8 @@ const actualizarUsuario = async(req,res) => {
 
         res.status(200).json({
             success:true,
-            valor:usuario
+            nombre: usuario.nombre,
+            email: usuario.email,
         })
 
     }catch(error){
@@ -134,7 +137,8 @@ const desactivarUsuario = async(req,res) => {
 
         return res.status(200).json({
             success:true,
-            usuario
+            nombre: usuario.nombre,
+            email:usuario.email
         });
 
     }catch(error){
