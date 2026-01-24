@@ -1,4 +1,5 @@
 const Usuario = require('../models/usuario_model');
+const bcrypt = require('bcrypt');
 
 //En express , los controladores deben manejar
 //los objetos req y res
@@ -70,7 +71,7 @@ const guardarUsuario = async(req,res) => {
         let usuario = new Usuario({
             email: body.email,
             nombre: body.nombre,
-            password: body.password
+            password: bcrypt.hashSync( body.password, 10 )
         });
 
         const usuarioAdd =  await usuario.save();

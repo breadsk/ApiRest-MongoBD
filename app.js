@@ -1,5 +1,6 @@
 // app.js
 const express = require('express');
+const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const connectDB = require('./config/database');
 
