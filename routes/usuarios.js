@@ -1,6 +1,7 @@
 const express = require('express');
 const ruta = express.Router();
 const validarUsuario = require('../middlewares/validarUsuario');
+const validarToken = require('../middlewares/validarToken');
 const { 
         listarUsuariosActivos , 
         obtenerUsuarioPorEmail , 
@@ -9,7 +10,7 @@ const {
         desactivarUsuario } = require('../controller/usuarioController');
 
     
-ruta.get('/', listarUsuariosActivos);
+ruta.get('/',validarToken, listarUsuariosActivos);
 
 ruta.get('/:email',obtenerUsuarioPorEmail);
 

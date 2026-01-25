@@ -1,6 +1,8 @@
 const Usuario = require('../models/usuario_model');
 const bcrypt = require('bcrypt');
 
+
+
 //En express , los controladores deben manejar
 //los objetos req y res
 const listarUsuariosActivos = async(req,res) => {
