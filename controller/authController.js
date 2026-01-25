@@ -33,7 +33,7 @@ const login = async(req,res) => {
         }
         //const jwToken = jwt.sign({_id:usuario._id,nombre:usuario.nombre,email:usuario.email},process.env.JWT_SECRET);
         const jwToken = jwt.sign({
-            data: {_id:usuario._id,nombre:usuario.nombre,email:usuario.email}
+            usuario: {_id:usuario._id,nombre:usuario.nombre,email:usuario.email}
         }, process.env.JWT_SECRET,{expiresIn: '24h'})
 
         //4. Si todo es correcto, devolver usuario ( sin password )

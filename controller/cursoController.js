@@ -7,7 +7,8 @@ const listarCursosActivos = async(req,res) => {
         let cursos = await Curso.find({estado: true});
         res.json({
             success:true,
-            valor:cursos
+            //usuario:req.usuario,
+            cursos,            
         });
     }catch(error){
         res.status(500).json({
@@ -46,20 +47,20 @@ const obtenerCursoPorId = async(req,res) => {
 }
 
 const crearCurso = async(req,res) => {
-
-    let body = req.body;
+    
 
     try{
 
         let curso = new Curso({
-            titulo: body.titulo,
-            descripcion: body.descripcion
+            titulo: req.body.titulo,
+            autor: req.usuario._id,
+            descripcion: req.body.descripcion
         });
 
         const cursoAdd = await curso.save();
 
         res.json({
-            success: true,
+            success: true,            
             valor: cursoAdd,
         });
 

@@ -9,9 +9,11 @@ const validarToken = (req,res,next) => {
                 success:false,
                 err
             });
-        }else{            
-            next();
         }
+        req.usuario = decoded.usuario;
+        console.log(req.usuario);
+        next();
+        
     });
 }
 
