@@ -2,6 +2,7 @@ const express = require('express');
 const ruta = express.Router();
 const validarObjectId = require('../middlewares/validarObjectId');
 const validarCurso = require('../middlewares/validarCurso');
+const validarToken = require('../middlewares/validarToken');
 const { 
         obtenerCursoPorId,
         listarCursosActivos,
@@ -12,14 +13,14 @@ const {
 
 
 
-ruta.get('/', listarCursosActivos);
+ruta.get('/', validarToken,listarCursosActivos);
 
-ruta.get('/:id',validarObjectId('id'),obtenerCursoPorId);
+ruta.get('/:id',validarObjectId('id'),validarToken,obtenerCursoPorId);
 
-ruta.post('/',validarCurso, crearCurso);
+ruta.post('/',validarToken,validarCurso, crearCurso);
 
-ruta.put('/:id', validarCurso, actualizarCurso);
+ruta.put('/:id', validarToken,validarCurso, actualizarCurso);
 
-ruta.delete('/:id', desactivarCurso);
+ruta.delete('/:id', validarToken,desactivarCurso);
 
 module.exports = ruta;

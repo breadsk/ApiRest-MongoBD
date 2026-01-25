@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const validarToken = (req,res,next) => {
-    let token = req.get('Autorization');
+    let token = req.get('Authorization');
 
     jwt.verify(token,process.env.JWT_SECRET,(err,decoded)=>{
         if(err){           //No autorizado

@@ -12,13 +12,13 @@ const {
     
 ruta.get('/',validarToken, listarUsuariosActivos);
 
-ruta.get('/:email',obtenerUsuarioPorEmail);
+ruta.get('/:email',validarToken,obtenerUsuarioPorEmail);
 
-ruta.post('/', validarUsuario , guardarUsuario);
+ruta.post('/', validarToken,validarUsuario , guardarUsuario);
 
-ruta.put('/:email',validarUsuario , actualizarUsuario);
+ruta.put('/:email',validarToken,validarUsuario , actualizarUsuario);
 
-ruta.delete('/:email', desactivarUsuario);
+ruta.delete('/:email', validarToken,desactivarUsuario);
 
 
 module.exports = ruta;
