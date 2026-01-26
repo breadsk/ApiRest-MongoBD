@@ -1,8 +1,12 @@
 // app.js
 const express = require('express');
-const dotenv = require('dotenv');
 const connectDB = require('./config/database');
 //const config = require('config');
+//const dotenv = require('dotenv');
+// Solo cargar dotenv en desarrollo
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 // Routers
 const usuarios = require('./routes/usuarios');
@@ -10,7 +14,7 @@ const cursos = require('./routes/cursos');
 const auth = require('./routes/auth');
 
 
-dotenv.config();
+//dotenv.config();
 
 const app = express();
 
