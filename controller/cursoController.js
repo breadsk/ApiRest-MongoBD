@@ -5,8 +5,8 @@ const Curso = require('../models/curso_model');
 const listarCursosActivos = async(req,res) => {    
     try{
         let cursos = await Curso
-            .find({estado: true});
-            //.populate('autor','nombre email -_id');
+            .find({estado: true})
+            .populate('autor','nombre email -_id');
         res.json({
             success:true,
             //usuario:req.usuario,
