@@ -9,8 +9,7 @@ const cursoSchema = new mongoose.Schema({
     titulo: {
         type: String,
         required: true,        
-    },
-    autor: autorSchema,
+    },    
     autor:{
          type:Schema.Types.ObjectId, ref: 'Usuario'
     },
