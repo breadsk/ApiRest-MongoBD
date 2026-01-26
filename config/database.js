@@ -7,11 +7,7 @@ const connectDB = async () => {
             throw new Error('MONGODB_URI no está definida en las variables de entorno.');
         }
         
-        await mongoose.connect(process.env.MONGODB_URI, {
-            // Opciones de conexión para evitar warnings
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(process.env.MONGODB_URI);
         
         console.log('Conectado a mi base mongo BD');
         return mongoose.connection;
