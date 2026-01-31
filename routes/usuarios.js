@@ -14,7 +14,7 @@ ruta.get('/',validarToken, listarUsuariosActivos);
 
 ruta.get('/:email',validarToken,obtenerUsuarioPorEmail);
 
-ruta.post('/', validarToken,validarUsuario , guardarUsuario);
+ruta.post('/', validarToken, guardarUsuario);
 
 ruta.put('/:email',validarToken,validarUsuario , actualizarUsuario);
 

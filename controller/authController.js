@@ -1,3 +1,4 @@
+
 const Usuario = require('../models/usuario_model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -8,6 +9,11 @@ const jwt = require('jsonwebtoken');
 // servidor durante ese tiempo.
 const login = async(req,res) => {
     try{
+
+        console.log("Estoy apuntando");
+
+        console.log(req.body.email);
+        console.log(req.body.password);
 
         const { email , password } = req.body;
 

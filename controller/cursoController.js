@@ -3,6 +3,10 @@ const Curso = require('../models/curso_model');
 //En Express, los controladores deben manejar 
 //los objetos req y res
 const listarCursosActivos = async(req,res) => {    
+
+
+    console.log("Esta pasando por el listarCursosActivos");
+
     try{
         let cursos = await Curso
             .find({estado: true})
